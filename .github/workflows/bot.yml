@@ -8,8 +8,9 @@ on:
         required: false
         type: boolean
         default: false
-      tournament:
-        description: "Optional tournament parameter"
+  
+      Additional commands:
+        description: "Optional commands to pass"
         required: false
         default: ""
   push:
