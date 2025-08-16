@@ -14,7 +14,7 @@ on:
         type: boolean
         default: false
       additional_command:
-        description: "Optional additional command"
+        description: "Optional commands to pass"
         required: false
         default: ""
   push:
