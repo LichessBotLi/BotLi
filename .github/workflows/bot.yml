@@ -3,14 +3,18 @@ name: Run bot
 on:
   workflow_dispatch:
     inputs:
+      upgrade:
+        description: "Upgrade to a Lichess bot account?"
+        required: false
+        type: boolean
+        default: false
       matchmaking:
         description: "Enable matchmaking?"
         required: false
         type: boolean
         default: false
-  
-      Additional commands:
-        description: "Optional commands to pass"
+      additional_command:
+        description: "Optional additional command"
         required: false
         default: ""
   push:
@@ -66,17 +70,21 @@ jobs:
           echo "Starting bot..."
 
           # Read inputs
+          UPGRADE="${{ github.event.inputs.upgrade }}"
           MATCHMAKING="${{ github.event.inputs.matchmaking }}"
-          TOURNAMENT_INPUT="${{ github.event.inputs.tournament }}"
+          ADDITIONAL_CMD="${{ github.event.inputs.additional_command }}"
 
           # Build command dynamically
           CMD="python3 -u user_interface.py"
 
-          # Add matchmaking only if ticked
+          # Add --upgrade if ticked
+          [ "$UPGRADE" = "true" ] && CMD="$CMD --upgrade"
+
+          # Add matchmaking if ticked
           [ "$MATCHMAKING" = "true" ] && CMD="$CMD matchmaking"
 
-          # Add tournament if provided
-          [ -n "$TOURNAMENT_INPUT" ] && CMD="$CMD $TOURNAMENT_INPUT"
+          # Add additional command if provided
+          [ -n "$ADDITIONAL_CMD" ] && CMD="$CMD $ADDITIONAL_CMD"
 
           echo "Running command: $CMD"
           eval $CMD &
