@@ -34,6 +34,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 355
 
+    env:
+      LICHESS_BOT_TOKEN: ${{ secrets.LICHESS_KEY }}
+     
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -57,11 +60,6 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Inject Secret Token
-        env:
-          TOKEN: ${{ secrets.LICHESS_KEY }}
-        run: |
-          sed -i "s/^token:.*/token: \"${TOKEN}\"/" config.yml
   
       - name: Make Stockfish Executable
         run: |
